@@ -1,0 +1,44 @@
+# 不需要的配置，直接配置为空，或进行注释
+
+
+# --------------越权权配置--------------
+# 配置越权参数，根据需要配置这三个位置，更多的时候只是配置其中的一条
+# 配置请求参数，url链接中?后面的k-v参数
+query:
+# 每一行是表示一个k-v组，"segment"表示字段，"value"表示字段对应的值，"cover"表示是否覆盖原值
+#  - {"segment":"p1", "value":"v1", "cover":False}
+#  - {"segment":"p2", "value":"v2", "cover":True}
+#  - {"segment":"http", "value":"v2", "cover":True}
+
+
+# 配置请求头
+headers:
+# 每一行是表示一个k-v组，"segment"表示字段，"value"表示字段对应的值，"cover"表示是否覆盖原值
+#  - {"segment":"p1", "value":"v1", "cover":False}
+#  - {"segment":"Accept", "value":"gzip", "cover":False}
+#  - {"segment":"Accept-Encoding", "value":"none", "cover":True}
+#  - {"segment":"Accept-Language", "value":"zh", "cover":True}
+
+# 配置cookie
+# 传递cookie字符串
+cookies: "PHPSESSID=qbpdoift0686apkuam25cuk3pb"
+
+
+
+# --------------未授权配置--------------
+# 配置未授权参数，根据需要配置这三个位置，更多的时候只是配置cookies为空
+
+#query_unauth:
+# 每一行是表示一个k-v组，"segment"表示字段，"value"表示字段对应的值，"cover"表示是否覆盖原值
+#  - {"segment":"p1", "value":"v1", "cover":False}
+#  - {"segment":"p2", "value":"v2", "cover":True}
+
+
+# 配置请求头
+#headers_unauth:
+# 每一行是表示一个k-v组，"segment"表示字段，"value"表示字段对应的值，"cover"表示是否覆盖原值
+#  - {"segment":"p1", "value":"v1", "cover":False}
+
+# 配置cookie
+# 传递cookie字符串
+#cookies_unauth:
