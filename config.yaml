@@ -6,7 +6,7 @@
 # 配置请求参数，url链接中?后面的k-v参数
 query:
 # 每一行是表示一个k-v组，"segment"表示字段，"value"表示字段对应的值，"cover"表示是否覆盖原值
-#  - {"segment":"p1", "value":"v1", "cover":False}
+#  - {"segment":"username", "value":"kobe", "cover":True}
 #  - {"segment":"p2", "value":"v2", "cover":True}
 #  - {"segment":"http", "value":"v2", "cover":True}
 
@@ -21,7 +21,9 @@ headers:
 
 # 配置cookie
 # 传递cookie字符串
-cookies: "PHPSESSID=qbpdoift0686apkuam25cuk3pb"
+#cookies: "PHPSESSID=qbpdoift0686apkuam25cuk3pb"
+cookies: "PHPSESSID=ftp3e4f0i6a5pagtjopb429kd5"
+#cookies: "i-wanna-go-back=-1; buvid4=5035FA74-03D4-EF9C-85B4-A1EB6ADA168C44721-023102119-6HyR6tnIdoCM7K3XK4Ok1g%3D%3D; DedeUserID=299726536; DedeUserID__ckMd5=29451567a138c956; buvid_fp_plain=undefined; CURRENT_BLACKGAP=0; is-2022-channel=1; FEED_LIVE_VERSION=V_WATCHLATER_PIP_WINDOW3; b_ut=5; enable_web_push=DISABLE; header_theme_version=CLOSE; fingerprint=b2d592d50ec80d037d14e0ee0b19c349; PVID=1; buvid_fp=b2d592d50ec80d037d14e0ee0b19c349; buvid3=F6B87798-7EAE-5F2B-5034-21D07B51A8C180786infoc; b_nut=1730031280; _uuid=108A3BF65-F49B-8168-53BF-810361AF7693181393infoc; rpdid=|(k))J|)Y)R)0J'u~Jl~)m)m|; enable_feed_channel=ENABLE; home_feed_column=4; bili_ticket=eyJhbGciOiJIUzI1NiIsImtpZCI6InMwMyIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDMzMDQwMzMsImlhdCI6MTc0MzA0NDc3MywicGx0IjotMX0.my6JJaIZpJDN_PR0j9OaehH5Lnj3mtYnpzFePRmw_bQ; bili_ticket_expires=1743303973; SESSDATA=23a025a8%2C1758596834%2Cf8e2e%2A31CjAuocAGf_gXBVkTNPvD0dpzD-fpvhljSLnMzG_wQoSa9B7UB2A-WkTwPyNBSiTUgrYSVnhNT3A3MWs1Z2FIZHFYZERvMEJSakNQbVhWUTc4NWZDZ0lPTkh6dnRZUXp3YmJYTlhQSGFybmFYRV9iYkk5am5fZ0FBTlRLOUxjM2R4SVNleEs2VEVBIIEC; bili_jct=aff5e463d5df776724a22fceaa286634; CURRENT_FNVAL=4048; b_lsid=2395EEAE_195D7B56F74; bp_t_offset_299726536=1049014297117589504; browser_resolution=1211-275"
 
 
 

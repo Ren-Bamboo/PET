@@ -19,7 +19,39 @@ class PrivilegeEscalation:
     config_path = './config.yaml'
     result_path = "./result.txt"
     write_lock = threading.Lock()
+    check_mode = "no-strict"
+    white_list = ["*"]
+    black_list = []
+    PE_mode = "vertical"  # 默认垂直越权测试
 
+    @staticmethod
+    def set_hori_PE_mode():
+        PrivilegeEscalation.PE_mode = "hori"
+
+    @staticmethod
+    def set_white_list(w_list):
+        PrivilegeEscalation.white_list = w_list
+
+    @staticmethod
+    def set_black_list(w_list):
+        PrivilegeEscalation.black_list = w_list
+
+    @staticmethod
+    def check_white_black(url):
+        # 通过白名单
+        if "*" not in PrivilegeEscalation.white_list:
+            for white in PrivilegeEscalation.white_list:
+                if white not in url:
+                    return False
+
+        # 通过黑名单
+        for black in PrivilegeEscalation.black_list:
+            if black in url:
+                return False
+        return True
+    @staticmethod
+    def set_strict_mode():
+        PrivilegeEscalation.check_mode = "strict"
     @staticmethod
     def safe_create_directory(path):
         try:
@@ -82,24 +114,55 @@ class PrivilegeEscalation:
 
     @staticmethod
     def check_exist(res_list):
-        # 可以增加额外判定，这里只做两个，status_code 和 length
-        result = {}
-        key_li = ["pri_esc", "un_auth"]
-        nol = res_list[0]
-        pri = res_list[1]
-        una = res_list[2]
-        for ob, key in zip([pri, una], key_li):
-            if ob.status_code != nol.status_code and len(ob.content) != len(nol.content):
-                pass
-            elif ob.status_code == nol.status_code and len(ob.content) == len(nol.content):
-                result[key] = "high"
-            elif ob.status_code != nol.status_code and len(ob.content) == len(nol.content):
-                result[key] = "median"
-            else:
-                pass
-        if not result:
-            return None
-        return result
+        # 垂直越权
+        if PrivilegeEscalation.PE_mode == "vertical":
+            # 可以增加额外判定，这里只做两个，status_code 和 length
+            result = {}
+            key_li = ["PE_Ver", "un_auth"]
+            nol = res_list[0]
+            pri = res_list[1]
+            una = res_list[2]
+            for ob, key in zip([pri, una], key_li):
+                if ob.status_code != nol.status_code and len(ob.content) != len(nol.content):
+                    pass
+                elif ob.status_code == nol.status_code and len(ob.content) == len(nol.content):
+                    result[key] = "high"
+                elif ob.status_code != nol.status_code and len(ob.content) == len(nol.content):
+                    result[key] = "median"
+                else:
+                    pass
+            if not result:
+                return None
+            # 严格模式
+            if PrivilegeEscalation.check_mode == 'strict':
+                if "PE_Ver" in result and "un_auth" in result:
+                    if result["PE_Ver"] == 'high' and result["un_auth"] == "high":
+                        # 严格模式下，未授权请求的结果作为辅助判断的依据
+                        return None
+            return result
+        # 水平越权
+        else:
+            print(123)
+            result = {}
+            key = "PE_Ver"
+            nol = res_list[0]
+            pri = res_list[1]
+            una = res_list[2]
+            if PrivilegeEscalation.check_mode != 'strict':
+                print(234)
+                if nol.status_code == pri.status_code and len(nol.content) != len(pri.content):
+                    result[key] = "high"
+                if not result:
+                    return None
+                return result
+            else:   # 严格模式
+                print(456)
+                if nol.status_code == pri.status_code and nol.status_code != una.status_code and len(nol.content) != len(pri.content):
+                    result[key] = "high"
+                    print(789)
+                    return result
+                print(666)
+                return None
 
     @staticmethod
     def save_data(res_dic):
@@ -114,6 +177,10 @@ class PrivilegeEscalation:
     def run(raw_request):
         method, url, query_params, headers_dict, cookies, body = PrivilegeEscalation.parse_http(raw_request)
 
+        # 0、增加黑白名单检测
+        if not PrivilegeEscalation.check_white_black(url):
+            return
+
         # 1、hash检测，
         if not PrivilegeEscalation.hash_url(method+url):
             return
@@ -121,8 +188,9 @@ class PrivilegeEscalation:
         res_list = PrivilegeEscalation.send_request(method, url, query_params, headers_dict, cookies, body)
         if not res_list:
             return
-        # 3、验证是否存在漏洞
+        # 3、验证是否存在漏洞，根据不同测试情况选择对比指标
         res_dic = PrivilegeEscalation.check_exist(res_list)
+
         if not res_dic:
             return
         # 4、进行结果保存
@@ -130,6 +198,14 @@ class PrivilegeEscalation:
         res_dic['method'] = method
         res_dic['query'] = str(query_params)
         # 线程处理
+        print(url)
+        print(res_list[0].status_code)
+        print(res_list[1].status_code)
+        print(res_list[2].status_code)
+        print(len(res_list[0].content))
+        print(len(res_list[1].content))
+        print(len(res_list[2].content))
+        print()
         PrivilegeEscalation.executor.submit(PrivilegeEscalation.save_data, res_dic)
 
     @staticmethod
